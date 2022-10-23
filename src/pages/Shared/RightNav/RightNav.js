@@ -1,18 +1,24 @@
 import React, { useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
+import toast from 'react-hot-toast';
 import { FaDiscord, FaFacebook, FaMoneyCheck, FaNewspaper, FaTwitter, FaWhatsapp, FaYoutube } from 'react-icons/fa';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../contexts/AuthProvider/AuthProvider';
 import BrandCarousel from '../../BrandCarousel/BrandCarousel';
 
 const RightNav = () => {
     const { googleSignIn } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/";
 
     const handleGoogleSignIn = () => {
         googleSignIn()
             .then(result => {
                 const user = result.user;
-                console.log(user);
+                navigate(from, { replace: true });
+                toast.success("Google sign in successful.")
             })
             .catch(error => console.error(error))
     }

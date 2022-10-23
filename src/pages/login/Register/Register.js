@@ -25,9 +25,11 @@ const Register = () => {
                 emailVerify()
                 form.reset();
                 toast.success('Verification Email send! Please verify it.')
-                console.log(user)
             })
-            .catch(error => console.error(error))
+            .catch(error => {
+                toast.error(error.message)
+                console.error(error)
+            })
     }
     const setUserInfo = (name, photo) => {
         const profile = {
@@ -66,6 +68,7 @@ const Register = () => {
                 <Button variant="primary" disabled={!accepted} type="submit">
                     Submit
                 </Button>
+                <br />
             </Form>
         </div>
     );
