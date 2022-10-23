@@ -1,3 +1,4 @@
+import { FacebookAuthProvider, GithubAuthProvider } from 'firebase/auth';
 import React, { useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
@@ -8,7 +9,11 @@ import { AuthContext } from '../../../contexts/AuthProvider/AuthProvider';
 import BrandCarousel from '../../BrandCarousel/BrandCarousel';
 
 const RightNav = () => {
-    const { googleSignIn } = useContext(AuthContext);
+
+    const { googleSignIn, githubSignIn, facebookSignIn, setLoading } = useContext(AuthContext);
+    const githubProvider = new GithubAuthProvider();
+    const facebookProvider = new FacebookAuthProvider();
+
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || "/";
@@ -22,14 +27,38 @@ const RightNav = () => {
             })
             .catch(error => console.error(error))
     }
+    const handleGithubSignIn = () => {
+        githubSignIn(githubProvider)
+            .then(result => {
+                const user = result.user;
+                console.log(user);
+                navigate(from, { replace: true });
+                toast.success("Github sign in successful.")
+            })
+            .catch(error => console.error(error))
+            .finally(() => setLoading(false))
+    }
+    const handleFacebookSignIn = () => {
+        facebookSignIn(facebookProvider)
+            .then(result => {
+                const user = result.user;
+                console.log(user);
+                navigate(from, { replace: true });
+                toast.success("Facebook sign in successful.")
+            })
+            .catch(error => console.error(error))
+    }
     return (
         <div>
             <div className="d-grid gap-2 my-3">
                 <Button onClick={handleGoogleSignIn} variant="primary" size="lg">
                     Google Sign In
                 </Button>
-                <Button variant="secondary" size="lg">
+                <Button onClick={handleGithubSignIn} variant="warning" size="lg">
                     Github Sign In
+                </Button>
+                <Button onClick={handleFacebookSignIn} variant="info" size="lg">
+                    Facebook Sign In
                 </Button>
             </div>
             <ListGroup>
