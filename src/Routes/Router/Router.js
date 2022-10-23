@@ -3,7 +3,11 @@ import { createBrowserRouter } from 'react-router-dom';
 import Main from '../../layout/Main';
 import CategoryNews from '../../pages/CategoryNews/CategoryNews';
 import Home from '../../pages/Home/Home';
+import Login from '../../pages/login/Login/Login';
 import News from '../../pages/News/News';
+import PrivateRoutes from '../PrivateRoutes/PrivateRoutes';
+import Register from '../../pages/login/Register/Register'
+import TermsAndConditions from '../../pages/others/TermsAndConditions/TermsAndConditions';
 
 export const router = createBrowserRouter([
     {
@@ -23,7 +27,19 @@ export const router = createBrowserRouter([
             {
                 path: "/news/:id",
                 loader: ({ params }) => fetch(`http://localhost:5000/news/${params.id}`),
-                element: <News></News>
+                element: <PrivateRoutes><News></News></PrivateRoutes>
+            },
+            {
+                path: "/login",
+                element: <Login></Login>
+            },
+            {
+                path: "/register",
+                element: <Register></Register>
+            },
+            {
+                path: "/terms",
+                element: <TermsAndConditions></TermsAndConditions>
             }
         ]
     }

@@ -1,14 +1,25 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { FaDiscord, FaFacebook, FaMoneyCheck, FaNewspaper, FaTwitter, FaWhatsapp, FaYoutube } from 'react-icons/fa';
+import { AuthContext } from '../../../contexts/AuthProvider/AuthProvider';
 import BrandCarousel from '../../BrandCarousel/BrandCarousel';
 
 const RightNav = () => {
+    const { googleSignIn } = useContext(AuthContext);
+
+    const handleGoogleSignIn = () => {
+        googleSignIn()
+            .then(result => {
+                const user = result.user;
+                console.log(user);
+            })
+            .catch(error => console.error(error))
+    }
     return (
         <div>
             <div className="d-grid gap-2 my-3">
-                <Button variant="primary" size="lg">
+                <Button onClick={handleGoogleSignIn} variant="primary" size="lg">
                     Google Sign In
                 </Button>
                 <Button variant="secondary" size="lg">

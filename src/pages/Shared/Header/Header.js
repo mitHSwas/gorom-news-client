@@ -1,8 +1,15 @@
-import React from 'react';
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import React, { useContext } from 'react';
+import { Button, Container, Image, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../../contexts/AuthProvider/AuthProvider';
 
 const Header = () => {
+    const { user, logOut } = useContext(AuthContext)
+    const handleSingOut = () => {
+        logOut()
+            .then(() => { })
+            .catch(e => console.error(e))
+    }
     return (
         <div>
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -15,15 +22,23 @@ const Header = () => {
                             <Nav.Link href="#pricing">Pricing</Nav.Link>
                         </Nav>
                         <Nav>
-                            <Nav.Link href="#deets">More deets</Nav.Link>
-                            <Nav.Link eventKey={2} href="#memes">
-                                Dank memes
-                            </Nav.Link>
+                            {
+                                user?.uid ?
+                                    <>
+                                        <Link to="/profile">{user?.displayName}</Link>
+                                        <Image src={user?.photoURL} height="40px" className="mx-2" roundedCircle></Image>
+                                        <Button onClick={handleSingOut} variant="light">Log Out</Button>
+                                    </> :
+                                    <>
+                                        <Link to="/login"><Button className="me-2" variant="primary">Login</Button></Link>
+                                        <Link to="/register"><Button variant="success">Register</Button></Link>
+                                    </>
+                            }
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-        </div>
+        </div >
     );
 };
 
